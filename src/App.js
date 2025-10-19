@@ -1,12 +1,5 @@
 import { Console } from "@woowacourse/mission-utils";
 
-// 예외처리
-// 입력 문자열(str)이 빈 값일 경우
-// 구분자가 없는 경우
-// 구분자로 구분했는데 빈 값이 있을 경우
-// 구분자로 구분했는데 숫자가 아닌 경우
-// 구분자로 구분했는데 숫잔데 양수가 아닌 경우 (정수가 아니거나, 0이거나 음수일 경우)
-
 function fail(msg) {
   throw new Error(`[ERROR] ${msg}`);
 }
@@ -24,13 +17,13 @@ class App {
       const custom = str.match(/^\/\/(.)\\n(.*)$/);
       if (custom) {
         const delimiter = custom[1];
-        if (!custom[2].includes(delimiter)) {
-          fail("구분자가 없습니다.");
-        }
-        numbers = custom[2].split(delimiter);
+        const body = custom[2];
+        if (body.includes(delimiter)) {
+          numbers = body.split(delimiter);
+        } else numbers = [body];
       } else if (str.includes(",") || str.includes(":")) {
         numbers = str.split(/[,:]/);
-      } else fail("구분자가 없습니다.");
+      } else numbers = [str];
 
       let sum = 0;
       numbers.forEach((item) => {
@@ -55,6 +48,7 @@ class App {
         error.message ||
           "[ERROR] 알 수 없는 오류가 발생했습니다. 다시 시도해 주세요."
       );
+      throw error;
     }
   }
 }
